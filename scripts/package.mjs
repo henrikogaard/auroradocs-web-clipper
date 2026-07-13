@@ -28,7 +28,7 @@ await mkdir(distDirectory, { recursive: true })
 const output = createWriteStream(fileURLToPath(archivePath))
 const archive = archiver('zip', {
   forceLocalTime: false,
-  zlib: { level: 9 },
+  store: true,
 })
 const outputFinished = finished(output)
 
