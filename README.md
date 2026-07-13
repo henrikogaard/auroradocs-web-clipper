@@ -1,26 +1,97 @@
 # AuroraDocs Web Clipper
 
-Manifest V3 browser extension for capturing the active browser tab into AuroraDocs.
+AuroraDocs Web Clipper is a Manifest V3 browser extension that saves the active
+page or selected content to the Inbox of an AuroraCloud workspace.
 
-## Local install
+## Requirements
 
-1. Open `chrome://extensions`.
-2. Enable Developer mode.
-3. Choose **Load unpacked** and select `apps/clipper`.
-4. Open the extension popup and enter:
-   - AuroraCloud API URL, for example `https://api.auroradocs.eu`
-   - Workspace ID
-   - your AuroraDocs email and password
-5. Complete MFA in the popup if your account requires it.
+- A Chromium-based browser that supports Manifest V3 extensions
+- An AuroraCloud or compatible self-hosted workspace
+- Your workspace's API URL and Workspace ID
+- An AuroraDocs account with access to that workspace
 
-The clipper stores its AuroraDocs session in browser-extension local storage and
-uses the AuroraCloud refresh token to renew expired access tokens while clipping.
-It no longer requires copying a short-lived bearer token from a separate API
-login response.
+Browser-only workspaces and Local folders workspaces are not supported because
+the extension must send clips to an AuroraCloud-compatible API.
 
-## What it captures
+## Install from a release
 
-- **Clip page** creates a `bookmark` object, marks it as Inbox, and stores `source_url`.
-- **Clip selection** creates a `page` object with the current selection as a quote, marks it as Inbox, and stores `source_url`. The selected quote preserves basic formatting such as bold text, links, and ordered/unordered lists. Relative links inside the selection are resolved against the clipped page URL before they are saved.
+1. Download the Web Clipper release archive and extract it to a folder you will
+   keep on your computer.
+2. Open `chrome://extensions`.
+3. Enable **Developer mode**.
+4. Select **Load unpacked** and choose the extracted extension folder (the
+   folder containing `manifest.json`).
+5. Pin AuroraDocs Web Clipper from the browser's Extensions menu if you want it
+   visible in the toolbar.
 
-This is the first production slice. Store packaging, screenshot capture, richer article extraction, and Firefox/Safari variants are intentionally follow-up work.
+Do not delete or move the extracted folder while the extension is installed.
+
+## Connect AuroraDocs
+
+1. Open the extension popup.
+2. Keep the production API URL, `https://api.auroradocs.eu`, or enter the URL
+   supplied by your self-hosted administrator.
+3. Enter the Workspace ID for the destination workspace.
+4. Enter your AuroraDocs email and password, then select **Sign in**.
+5. If prompted for MFA, use your authenticator code or request and enter an
+   email code.
+
+Sign-in creates an interactive, refreshable AuroraDocs session for this browser
+extension. The session is stored in `chrome.storage.local`; the API URL and
+Workspace ID are stored in extension sync storage.
+MCP tokens are not used by the Web Clipper and should not be pasted into it.
+
+See [Privacy and permissions](docs/privacy-and-permissions.md) for the complete
+storage, page-access, and deletion behavior.
+
+## Capture content
+
+Open the page you want to save, select the extension, and choose:
+
+- **Clip page** to create an Inbox bookmark with the page title, URL, and
+  description.
+- **Clip selection** to create an Inbox page containing the selected text as a
+  quote. Basic formatting, links, and ordered or unordered lists are preserved;
+  relative links are resolved against the source page.
+
+The `activeTab` and `scripting` permissions allow inspection only after you
+invoke the clipper on the active page. Some browser-managed pages, extension
+pages, and protected store pages cannot be captured.
+
+## Update
+
+1. Download and extract the new release to a stable folder.
+2. Open `chrome://extensions`.
+3. Remove the existing AuroraDocs Web Clipper entry, then use **Load unpacked**
+   to select the new extracted folder. Alternatively, replace the files in the
+   existing folder and select **Reload** on the extension card.
+4. Open the popup and confirm the API URL, Workspace ID, and sign-in state.
+
+## Sign out or uninstall
+
+Select **Sign out** in the popup to delete the locally stored AuroraDocs session.
+The API URL and Workspace ID remain so the extension can be reconnected easily.
+Removing the extension deletes its local session from that browser profile.
+Connection settings use browser sync and may exist in another synced profile;
+remove the extension there as well if needed. Clips already saved in AuroraDocs
+are not deleted.
+
+## Support and security
+
+For setup and capture failures, see [Troubleshooting](docs/troubleshooting.md).
+For reproducible non-sensitive defects, open a GitHub issue. Do not put account
+details, credentials, session values, workspace contents, or production user
+data in an issue.
+
+Report suspected vulnerabilities privately as described in
+[SECURITY.md](SECURITY.md). Please do not open a public issue for a security
+report.
+
+## Contributing
+
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the
+[Code of Conduct](CODE_OF_CONDUCT.md) before submitting a change.
+
+## License
+
+Licensed under the Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
