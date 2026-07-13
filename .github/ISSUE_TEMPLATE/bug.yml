@@ -1,0 +1,63 @@
+name: Bug report
+description: Report a reproducible, non-sensitive Web Clipper defect
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve AuroraDocs Web Clipper. Do not include credentials, tokens, MFA codes, workspace contents, or production user data. Report suspected vulnerabilities privately using SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Web Clipper version
+      placeholder: "For example: 0.9.2"
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: "For example: Chromium-based browser, version 000"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem
+      description: Describe the defect without private account or workspace information.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Use synthetic or sanitized example data.
+      placeholder: |
+        1. Open a normal web page
+        2. Select the extension
+        3. Choose an action
+        4. Observe the result
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional sanitized context
+      description: Optional screenshots or logs must not expose private information.
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed credentials, tokens, MFA codes, workspace contents, and production user data.
+          required: true
+        - label: This is not a private security report.
+          required: true

@@ -4,7 +4,12 @@
   "version": "0.9.2",
   "type": "module",
   "scripts": {
-    "test": "node --test src/*.test.js",
-    "validate": "node scripts/validate.mjs"
+    "test": "node --test src/*.test.js scripts/*.test.mjs",
+    "validate": "node scripts/validate.mjs",
+    "package": "node scripts/package.mjs",
+    "check": "pnpm test && pnpm validate && pnpm package"
+  },
+  "devDependencies": {
+    "archiver": "^7.0.1"
   }
 }
