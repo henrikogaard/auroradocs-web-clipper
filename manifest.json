@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "AuroraDocs Web Clipper",
+  "description": "Capture pages and selections into AuroraDocs Inbox.",
+  "version": "0.7.9",
+  "action": {
+    "default_title": "Clip to AuroraDocs",
+    "default_popup": "src/popup.html"
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["<all_urls>"]
+}

@@ -1,0 +1,23 @@
+import { readFile } from 'node:fs/promises'
+
+const manifest = JSON.parse(await readFile(new URL('../manifest.json', import.meta.url), 'utf8'))
+
+const requiredPermissions = new Set(['activeTab', 'scripting', 'storage'])
+for (const permission of requiredPermissions) {
+  if (!manifest.permissions?.includes(permission)) {
+    throw new Error(`manifest.json is missing permission: ${permission}`)
+  }
+}
+
+if (manifest.manifest_version !== 3) {
+  throw new Error('AuroraDocs Web Clipper must stay on Manifest V3')
+}
+
+if (!manifest.action?.default_popup) {
+  throw new Error('manifest.json must define action.default_popup')
+}
+
+await readFile(new URL(`../${manifest.action.default_popup}`, import.meta.url), 'utf8')
+await readFile(new URL('../src/background.js', import.meta.url), 'utf8')
+
+console.log('AuroraDocs Web Clipper manifest is valid.')

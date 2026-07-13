@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AuroraDocs Web Clipper</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #111;
+        color: #f4f1ea;
+      }
+
+      body {
+        width: 340px;
+        margin: 0;
+        background:
+          radial-gradient(circle at 12% 0%, rgba(226, 145, 88, 0.22), transparent 34%),
+          #121212;
+      }
+
+      main {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.2;
+      }
+
+      p {
+        margin: 0;
+        color: #aaa39a;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      label {
+        display: grid;
+        gap: 5px;
+        color: #d8d3ca;
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      input {
+        box-sizing: border-box;
+        width: 100%;
+        border: 1px solid #393633;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        padding: 9px 10px;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: #e29158;
+        box-shadow: 0 0 0 3px rgba(226, 145, 88, 0.16);
+      }
+
+      select {
+        box-sizing: border-box;
+        width: 100%;
+        border: 1px solid #393633;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        padding: 9px 10px;
+        outline: none;
+      }
+
+      button {
+        border: 0;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-weight: 750;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+
+      .primary {
+        background: #e29158;
+        color: #130d09;
+      }
+
+      .secondary {
+        background: rgba(255, 255, 255, 0.08);
+        color: #f4f1ea;
+      }
+
+      .danger {
+        background: rgba(248, 113, 113, 0.14);
+        color: #fecaca;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .panel {
+        display: grid;
+        gap: 10px;
+      }
+
+      .session-row {
+        align-items: center;
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+      }
+
+      .session-row strong {
+        color: #f8efe4;
+        display: block;
+        font-size: 12px;
+        max-width: 210px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      #status {
+        min-height: 18px;
+        color: #c8c0b7;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>AuroraDocs Clipper</h1>
+        <p>Capture the current page or selected text into your AuroraDocs Inbox.</p>
+      </header>
+
+      <label>
+        API URL
+        <input id="apiUrl" placeholder="https://api.auroradocs.eu" />
+      </label>
+      <label>
+        Workspace ID
+        <input id="workspaceId" placeholder="Workspace ID" />
+      </label>
+
+      <section id="signedOutPanel" class="panel">
+        <label>
+          Email
+          <input id="email" type="email" autocomplete="username" placeholder="you@example.com" />
+        </label>
+        <label>
+          Password
+          <input id="password" type="password" autocomplete="current-password" placeholder="AuroraDocs password" />
+        </label>
+        <button id="signIn" class="primary" type="button">Sign in</button>
+      </section>
+
+      <section id="mfaPanel" class="panel hidden">
+        <p id="mfaHint">Enter your AuroraDocs sign-in code.</p>
+        <label>
+          Method
+          <select id="mfaMethod"></select>
+        </label>
+        <label>
+          Code
+          <input id="mfaCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" />
+        </label>
+        <div class="actions">
+          <button id="verifyMfa" class="primary" type="button">Verify</button>
+          <button id="requestEmailCode" class="secondary" type="button">Email code</button>
+        </div>
+        <button id="cancelMfa" class="secondary" type="button">Cancel sign-in</button>
+      </section>
+
+      <section id="signedInPanel" class="panel hidden">
+        <div class="session-row">
+          <p>Signed in as <strong id="signedInAs"></strong></p>
+          <button id="signOut" class="danger" type="button">Sign out</button>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button id="clipPage" class="primary" type="button">Clip page</button>
+        <button id="clipSelection" class="secondary" type="button">Clip selection</button>
+      </div>
+
+      <p id="status"></p>
+    </main>
+    <script src="popup.js" type="module"></script>
+  </body>
+</html>
