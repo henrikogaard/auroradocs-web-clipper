@@ -17,8 +17,10 @@ The exported snapshot was initialized as a new repository. Its tree identity
 was verified against the source tree before publication. The repository root
 contains `README.md`, `manifest.json`, `package.json`, `scripts/`, and `src/`.
 
-The snapshot and publication-audit commits use the verified GitHub noreply
-address for the repository owner.
+The source commits in the clean-snapshot history use the verified GitHub
+noreply address for the repository owner. The public merge commit `040a52a`
+uses the maintainer author email `henrik@ogard.no`. Maintainer approval or
+remediation for that already-public metadata is still pending.
 
 ## Publication checks
 
@@ -27,15 +29,16 @@ The following checks were run against the clean snapshot history:
 | Check | Result |
 | --- | --- |
 | Full-history secret scan | Pass: no leaks found |
-| Author metadata audit | Pass: one GitHub noreply address |
+| Author metadata audit | Source history passed with one GitHub noreply address; public merge commit `040a52a` requires maintainer approval or remediation |
 | Secret-like commit-message audit | Pass: no matches |
 | Secret-like path audit | Pass: no matches |
 | Automated tests | Pass: 15 passed, 0 failed |
 | Manifest validation | Pass |
 
-No raw scanner findings, personal author metadata, private repository paths,
-private issue references, or private source identifiers are included in this
-report.
+No raw scanner findings, private repository paths, private issue references,
+or private source identifiers are included in this report. The only personal
+author metadata recorded here is the already-public address on merge commit
+`040a52a`.
 
 ## Release-candidate validation
 
