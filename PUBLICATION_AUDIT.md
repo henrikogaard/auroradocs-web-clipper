@@ -19,8 +19,8 @@ contains `README.md`, `manifest.json`, `package.json`, `scripts/`, and `src/`.
 
 The source commits in the clean-snapshot history use the verified GitHub
 noreply address for the repository owner. The public merge commit `040a52a`
-uses the maintainer author email `henrik@ogard.no`. Maintainer approval or
-remediation for that already-public metadata is still pending.
+uses the maintainer author email `henrik@ogard.no`, which the maintainer
+explicitly approved for public commit metadata on 2026-07-13.
 
 ## Publication checks
 
@@ -29,7 +29,7 @@ The following checks were run against the clean snapshot history:
 | Check | Result |
 | --- | --- |
 | Full-history secret scan | Pass: no leaks found |
-| Author metadata audit | Source history passed with one GitHub noreply address; public merge commit `040a52a` requires maintainer approval or remediation |
+| Author metadata audit | Pass: source history uses one GitHub noreply address; maintainer explicitly approved the public email on merge commit `040a52a` |
 | Secret-like commit-message audit | Pass: no matches |
 | Secret-like path audit | Pass: no matches |
 | Automated tests | Pass: 15 passed, 0 failed |
