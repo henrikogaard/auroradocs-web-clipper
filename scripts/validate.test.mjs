@@ -2,10 +2,10 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import { readFile } from 'node:fs/promises'
 
-test('package and manifest versions are both the standalone 0.1.0 release', async () => {
+test('package and manifest versions are both the standalone 0.1.1 release', async () => {
   const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'))
   const manifest = JSON.parse(await readFile(new URL('../manifest.json', import.meta.url), 'utf8'))
-  assert.equal(pkg.version, '0.1.0')
+  assert.equal(pkg.version, '0.1.1')
   assert.equal(manifest.version, pkg.version)
 })
 
@@ -26,8 +26,8 @@ test('README documents public installation, authentication, and privacy behavior
   }
 })
 
-test('public release surfaces use the standalone 0.1.0 archive name', async () => {
-  const expectedArchive = 'auroradocs-web-clipper-0.1.0.zip'
+test('public release surfaces use the standalone 0.1.1 archive name', async () => {
+  const expectedArchive = 'auroradocs-web-clipper-0.1.1.zip'
   const bugTemplate = await readFile(new URL('../.github/ISSUE_TEMPLATE/bug.yml', import.meta.url), 'utf8')
   const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8')
   const ciWorkflow = await readFile(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')

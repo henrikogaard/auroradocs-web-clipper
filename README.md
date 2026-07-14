@@ -15,7 +15,7 @@ the extension must send clips to an AuroraCloud-compatible API.
 
 ## Install from a release
 
-1. Download `auroradocs-web-clipper-0.1.0.zip` from the v0.1.0 release and
+1. Download `auroradocs-web-clipper-0.1.1.zip` from the v0.1.1 release and
    extract it to a folder you will keep on your computer.
 2. Open `chrome://extensions`.
 3. Enable **Developer mode**.
