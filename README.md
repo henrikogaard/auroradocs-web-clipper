@@ -3,6 +3,9 @@
 AuroraDocs Web Clipper is a Manifest V3 browser extension that saves the active
 page or selected content to the Inbox of an AuroraCloud workspace.
 
+For an end-to-end installation walkthrough, use the dedicated
+[Setup guide](docs/setup.md).
+
 ## Requirements
 
 - A Chromium-based browser that supports Manifest V3 extensions
@@ -31,7 +34,9 @@ Do not delete or move the extracted folder while the extension is installed.
 1. Open the extension popup.
 2. Keep the production API URL, `https://api.auroradocs.eu`, or enter the URL
    supplied by your self-hosted administrator.
-3. Enter the Workspace ID for the destination workspace.
+3. In AuroraDocs, open **Settings → Workspace**, copy **Workspace ID**, and
+   enter it in the popup. For a self-hosted workspace, ask its administrator
+   for both the API URL and Workspace ID.
 4. Enter your AuroraDocs email and password, then select **Sign in**.
 5. If prompted for MFA, use your authenticator code or request and enter an
    email code.
@@ -62,10 +67,12 @@ pages, and protected store pages cannot be captured.
 
 1. Download and extract the new release to a stable folder.
 2. Open `chrome://extensions`.
-3. Remove the existing AuroraDocs Web Clipper entry, then use **Load unpacked**
-   to select the new extracted folder. Alternatively, replace the files in the
-   existing folder and select **Reload** on the extension card.
-4. Open the popup and confirm the API URL, Workspace ID, and sign-in state.
+3. To preserve the existing local session, replace the files in the currently
+   loaded folder and select **Reload** on the extension card.
+4. Alternatively, remove the existing entry and use **Load unpacked** with the
+   new folder. Removal deletes the local session, so sign in again and complete
+   MFA again if prompted.
+5. Open the popup and confirm the API URL, Workspace ID, and sign-in state.
 
 ## Sign out or uninstall
 

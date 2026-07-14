@@ -26,6 +26,35 @@ test('README documents public installation, authentication, and privacy behavior
   }
 })
 
+test('dedicated setup guide covers install, connection, verification, updates, and removal', async () => {
+  const [readme, setup] = await Promise.all([
+    readFile(new URL('../README.md', import.meta.url), 'utf8'),
+    readFile(new URL('../docs/setup.md', import.meta.url), 'utf8'),
+  ])
+
+  assert.match(readme, /\[Setup guide\]\(docs\/setup\.md\)/)
+  for (const text of [
+    '# Setup',
+    'auroradocs-web-clipper-0.1.1.zip',
+    'chrome://extensions',
+    'Load unpacked',
+    'https://api.auroradocs.eu',
+    'Workspace ID',
+    'Settings → Workspace',
+    'email and password',
+    'MFA',
+    'Clip page',
+    'Clip selection',
+    'MCP tokens are not used',
+    'Update the extension',
+    'preserves the existing local session',
+    'sign in again',
+    'Uninstall',
+  ]) {
+    assert.ok(setup.includes(text), `docs/setup.md is missing required setup guidance: ${text}`)
+  }
+})
+
 test('public release surfaces use the standalone 0.1.1 archive name', async () => {
   const expectedArchive = 'auroradocs-web-clipper-0.1.1.zip'
   const bugTemplate = await readFile(new URL('../.github/ISSUE_TEMPLATE/bug.yml', import.meta.url), 'utf8')
