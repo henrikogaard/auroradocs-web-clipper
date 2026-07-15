@@ -11,21 +11,21 @@ not include telemetry or analytics.
 | `activeTab` | Gives temporary access to the active page after you invoke the extension. |
 | `scripting` | Runs the capture script in that user-invoked active page to read its title, URL, description, and selected content. |
 | `storage` | Stores connection settings and the signed-in extension session in browser-managed extension storage. |
-| `<all_urls>` | Allows capture on user-selected web pages and network requests to the production or a user-configured/self-hosted API target. This is broad host access, but capture still occurs only when you invoke the clipper. |
+| API host permissions | The production API and localhost are available by default. A self-hosted HTTPS API is requested only when you explicitly configure that origin. |
 
 The `activeTab` and `scripting` permissions inspect only the active page in
 response to a user-invoked clip action. The extension does not inspect other
-tabs in the background. Browser-protected pages may reject capture even though
-the extension declares `<all_urls>`.
+tabs in the background. Browser-protected pages may reject capture even when
+the active tab permission is granted.
 
 ## Data stored in the browser
 
 - `chrome.storage.sync` stores the API URL and Workspace ID so those connection
   settings can follow the browser profile where extension sync is enabled.
-- `chrome.storage.local` stores the refreshable AuroraDocs session, including
-  its access and refresh tokens and basic signed-in user information. It stays
-  in browser-managed local extension storage and is used to authenticate and
-  renew the interactive clipper session.
+- `chrome.storage.local` stores the short-lived interactive session only while
+  pairing, then stores scoped clipper credentials, authorization metadata, and
+  encrypted retry envelopes. Retry payloads are encrypted with a browser-local
+  key; the extension does not persist capture plaintext.
 - The email and password entered during sign-in are sent to the configured API
   for authentication; they are not saved in extension storage.
 
@@ -35,10 +35,12 @@ authentication. MCP tokens are not used by the Web Clipper.
 ## Data sent when clipping
 
 When you choose **Clip page** or **Clip selection**, the extension reads the
-active page's title, URL, description, and current selection. It sends the
-fields required for the selected capture to the configured API and Workspace
-ID to create an Inbox object. Selection capture may include basic HTML
-formatting and resolved links from the selected content.
+active page's title, URL, description, and current selection. For an encrypted
+workspace it seals the capture with the workspace capture public key and sends
+only the capture ID, generation, and opaque envelope to the configured API.
+The API cannot decrypt or materialize the clip until a trusted unlocked
+AuroraDocs client does so. Selection capture may include basic HTML formatting
+and resolved links from the selected content.
 
 Review the active page and selection before clipping confidential information.
 A self-hosted API URL is controlled by its operator, whose privacy and retention
@@ -46,8 +48,10 @@ terms apply to data sent there.
 
 ## Sign-out, uninstall, and server data
 
-- **Sign out** deletes the AuroraDocs session from `chrome.storage.local`. It
-  does not delete the API URL or Workspace ID from `chrome.storage.sync`.
+- **Sign out** deletes the interactive AuroraDocs session from
+  `chrome.storage.local`; it does not revoke an existing scoped pairing.
+- **Disconnect** removes scoped clipper credentials and workspace authorizations
+  from this browser. An administrator can also revoke the clipper in AuroraDocs.
 - **Uninstall** removes the extension and clears its `chrome.storage.local`
   data from that browser profile, including the session. Because connection
   settings use browser sync, they may already exist in another synced browser

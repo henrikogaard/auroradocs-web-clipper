@@ -19,12 +19,25 @@
 - For a self-hosted service, confirm the service is reachable from the browser
   and permits the extension's requests.
 
+## Pairing or encrypted capture fails
+
+- Sign in, choose **Enable encrypted capture**, and approve the displayed code
+  in a trusted AuroraDocs tab while the destination workspace is unlocked.
+- Pairing codes expire after a short window. Cancel the old request and start a
+  new pairing if approval is delayed.
+- If the clipper says authorization is stale, disconnect it and pair again. A
+  workspace administrator may have revoked this browser or rotated its capture
+  key.
+- A successful encrypted clip may briefly show as pending. It appears in Inbox
+  after a trusted AuroraDocs client unlocks and materializes the workspace.
+
 ## A clip is not saved
 
 - Confirm the Workspace ID belongs to an AuroraCloud or compatible self-hosted
   workspace that the signed-in account can access. Browser-only and Local
   folders workspaces are unsupported.
-- Sign out and sign in again if the session is no longer valid.
+- Re-pair the clipper if its scoped authorization is no longer valid. Direct
+  session capture remains available for non-E2EE workspaces.
 - Keep the source page active until the success or error message appears.
 - Browser settings pages, extension pages, web-store pages, and other protected
   URLs may block extension scripts. Try a normal `https://` page.

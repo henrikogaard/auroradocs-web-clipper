@@ -3,201 +3,24 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AuroraDocs Web Clipper</title>
+    <title>AuroraDocs Clipper</title>
     <style>
-      :root {
-        color-scheme: dark;
-        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        background: #111;
-        color: #f4f1ea;
-      }
-
-      body {
-        width: 340px;
-        margin: 0;
-        background:
-          radial-gradient(circle at 12% 0%, rgba(226, 145, 88, 0.22), transparent 34%),
-          #121212;
-      }
-
-      main {
-        display: grid;
-        gap: 12px;
-        padding: 16px;
-      }
-
-      h1 {
-        margin: 0;
-        font-size: 18px;
-        line-height: 1.2;
-      }
-
-      p {
-        margin: 0;
-        color: #aaa39a;
-        font-size: 12px;
-        line-height: 1.45;
-      }
-
-      label {
-        display: grid;
-        gap: 5px;
-        color: #d8d3ca;
-        font-size: 12px;
-        font-weight: 650;
-      }
-
-      input {
-        box-sizing: border-box;
-        width: 100%;
-        border: 1px solid #393633;
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.05);
-        color: #fff;
-        padding: 9px 10px;
-        outline: none;
-      }
-
-      input:focus {
-        border-color: #e29158;
-        box-shadow: 0 0 0 3px rgba(226, 145, 88, 0.16);
-      }
-
-      select {
-        box-sizing: border-box;
-        width: 100%;
-        border: 1px solid #393633;
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.05);
-        color: #fff;
-        padding: 9px 10px;
-        outline: none;
-      }
-
-      button {
-        border: 0;
-        border-radius: 12px;
-        padding: 10px 12px;
-        font-weight: 750;
-        cursor: pointer;
-      }
-
-      button:disabled {
-        cursor: not-allowed;
-        opacity: 0.55;
-      }
-
-      .primary {
-        background: #e29158;
-        color: #130d09;
-      }
-
-      .secondary {
-        background: rgba(255, 255, 255, 0.08);
-        color: #f4f1ea;
-      }
-
-      .danger {
-        background: rgba(248, 113, 113, 0.14);
-        color: #fecaca;
-      }
-
-      .actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-
-      .panel {
-        display: grid;
-        gap: 10px;
-      }
-
-      .session-row {
-        align-items: center;
-        display: flex;
-        gap: 8px;
-        justify-content: space-between;
-      }
-
-      .session-row strong {
-        color: #f8efe4;
-        display: block;
-        font-size: 12px;
-        max-width: 210px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .hidden {
-        display: none;
-      }
-
-      #status {
-        min-height: 18px;
-        color: #c8c0b7;
-      }
+      :root { color-scheme: light dark; --bg:#f7f4ef; --card:rgba(255,255,255,.88); --line:rgba(43,36,30,.14); --text:#2b241e; --muted:#756b62; --accent:#b75f37; --soft:#f4dfd2; --ok:#237a57; --danger:#a63e3e; font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+      @media (prefers-color-scheme: dark) { :root { --bg:#171513; --card:rgba(34,31,28,.94); --line:rgba(255,241,228,.14); --text:#f5ede5; --muted:#b8aaa0; --accent:#ed9c6d; --soft:rgba(237,156,109,.16); --ok:#8ed5ae; --danger:#ff9a9a; } }
+      * { box-sizing:border-box; } body { width:min(368px,100vw); min-height:330px; margin:0; background:radial-gradient(circle at 8% 0%,var(--soft),transparent 36%),var(--bg); color:var(--text); } main { display:grid; gap:14px; padding:18px; } h1 { margin:0; font-size:20px; line-height:1.1; letter-spacing:-.025em; } h2 { margin:0; font-size:14px; } p { margin:0; color:var(--muted); font-size:12px; line-height:1.5; } .eyebrow { color:var(--accent); font-size:10px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; } .header,.panel,.card { display:grid; gap:12px; } .header { gap:5px; } .card { padding:14px; border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 18px 42px rgba(58,40,27,.14); } label { display:grid; gap:6px; color:var(--text); font-size:11px; font-weight:700; } input,select { width:100%; border:1px solid var(--line); border-radius:10px; background:var(--card); color:var(--text); padding:10px 11px; outline:none; font:inherit; font-size:12px; } input:focus,select:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--soft); } button { border:0; border-radius:11px; padding:10px 12px; color:var(--text); background:var(--card); font:inherit; font-size:12px; font-weight:800; cursor:pointer; transition:transform .16s ease,opacity .16s ease; } button:hover:not(:disabled) { transform:translateY(-1px); } button:disabled { cursor:not-allowed; opacity:.5; } button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; } .primary { color:#fffaf5; background:var(--accent); } .secondary { border:1px solid var(--line); } .quiet { padding:6px 8px; background:transparent; color:var(--muted); font-size:11px; } .danger { color:var(--danger); background:transparent; } .actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; } .actions.single { grid-template-columns:1fr; } .row { display:flex; align-items:center; justify-content:space-between; gap:8px; } .preview { display:grid; gap:4px; padding:10px; border-left:3px solid var(--accent); background:var(--soft); } .preview-title,.preview-url { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } .preview-title { color:var(--text); font-size:12px; font-weight:750; } .preview-url { color:var(--muted); font-size:10px; } .code { color:var(--accent); font-size:26px; font-weight:850; letter-spacing:.18em; text-align:center; } .expiry { color:var(--muted); font-size:11px; text-align:center; } .status { min-height:18px; color:var(--muted); font-size:11px; } .status[data-kind=error] { color:var(--danger); } .status[data-kind=success] { color:var(--ok); } .hidden { display:none!important; } details summary { color:var(--muted); cursor:pointer; font-size:11px; font-weight:750; } details[open] summary { margin-bottom:10px; } @media (prefers-reduced-motion:reduce) { *,*::before,*::after { transition-duration:.01ms!important; animation-duration:.01ms!important; } }
     </style>
   </head>
   <body>
     <main>
-      <header>
-        <h1>AuroraDocs Clipper</h1>
-        <p>Capture the current page or selected text into your AuroraDocs Inbox.</p>
-      </header>
-
-      <label>
-        API URL
-        <input id="apiUrl" placeholder="https://api.auroradocs.eu" />
-      </label>
-      <label>
-        Workspace ID
-        <input id="workspaceId" placeholder="Workspace ID" />
-      </label>
-
-      <section id="signedOutPanel" class="panel">
-        <label>
-          Email
-          <input id="email" type="email" autocomplete="username" placeholder="you@example.com" />
-        </label>
-        <label>
-          Password
-          <input id="password" type="password" autocomplete="current-password" placeholder="AuroraDocs password" />
-        </label>
-        <button id="signIn" class="primary" type="button">Sign in</button>
-      </section>
-
-      <section id="mfaPanel" class="panel hidden">
-        <p id="mfaHint">Enter your AuroraDocs sign-in code.</p>
-        <label>
-          Method
-          <select id="mfaMethod"></select>
-        </label>
-        <label>
-          Code
-          <input id="mfaCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" />
-        </label>
-        <div class="actions">
-          <button id="verifyMfa" class="primary" type="button">Verify</button>
-          <button id="requestEmailCode" class="secondary" type="button">Email code</button>
-        </div>
-        <button id="cancelMfa" class="secondary" type="button">Cancel sign-in</button>
-      </section>
-
-      <section id="signedInPanel" class="panel hidden">
-        <div class="session-row">
-          <p>Signed in as <strong id="signedInAs"></strong></p>
-          <button id="signOut" class="danger" type="button">Sign out</button>
-        </div>
-      </section>
-
-      <div class="actions">
-        <button id="clipPage" class="primary" type="button">Clip page</button>
-        <button id="clipSelection" class="secondary" type="button">Clip selection</button>
-      </div>
-
-      <p id="status"></p>
+      <header class="header"><span class="eyebrow">AuroraDocs</span><h1>Save this page</h1><p>Capture it to your Inbox. Encrypted workspaces stay sealed until AuroraDocs unlocks them.</p></header>
+      <section class="preview" aria-label="Current page preview"><span id="previewTitle" class="preview-title">Current browser tab</span><span id="previewUrl" class="preview-url">Ready to capture</span></section>
+      <section id="stateConnect" class="card"><div class="panel"><div><h2>Connect to AuroraDocs</h2><p>Sign in once to pair this browser with a trusted workspace.</p></div><section id="signedOutPanel" class="panel"><label>Email<input id="email" type="email" autocomplete="username" placeholder="you@example.com" /></label><label>Password<input id="password" type="password" autocomplete="current-password" placeholder="AuroraDocs password" /></label><button id="signIn" class="primary" type="button">Sign in securely</button></section><section id="signedInPanel" class="panel hidden"><div class="row"><p>Signed in as <strong id="signedInAs"></strong></p><button id="signOut" class="quiet danger" type="button">Sign out</button></div><button id="pairClipper" class="primary" type="button">Enable encrypted capture</button></section><section id="mfaPanel" class="panel hidden"><p id="mfaHint">Enter your AuroraDocs sign-in code.</p><label>Method<select id="mfaMethod"></select></label><label>Code<input id="mfaCode" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" /></label><div class="actions"><button id="verifyMfa" class="primary" type="button">Verify</button><button id="requestEmailCode" class="secondary" type="button">Email code</button></div><button id="cancelMfa" class="quiet" type="button">Cancel sign-in</button></section></div></section>
+      <section id="stateApprove" class="card hidden"><div class="panel"><div><h2>Approve this browser</h2><p>Open AuroraDocs in a trusted tab and approve this one-time code.</p></div><div id="pairingCode" class="code" aria-label="Pairing code"></div><div id="pairingExpiry" class="expiry"></div><div class="actions"><button id="openAurora" class="primary" type="button">Open AuroraDocs</button><button id="cancelPairing" class="secondary" type="button">Cancel</button></div><p id="pairingStatus" class="status" aria-live="polite"></p></div></section>
+      <section id="stateReady" class="card hidden"><div class="panel"><div class="row"><div><span class="eyebrow">Encrypted Inbox</span><div id="workspaceLabel">Workspace</div><p id="workspaceMeta">Trusted browser</p></div><button id="signOutReady" class="quiet danger" type="button">Disconnect</button></div><label>Workspace<select id="workspacePicker" aria-label="Workspace"></select></label><div class="actions"><button id="clipPage" class="primary" type="button">Clip page</button><button id="clipSelection" class="secondary" type="button">Clip selection</button></div><p>Encrypted on this device. It appears after AuroraDocs unlocks the workspace.</p></div></section>
+      <section id="directActions" class="card hidden"><div class="panel"><div><h2>Quick capture</h2><p>Save using your signed-in AuroraDocs session.</p></div><div class="actions"><button id="clipPageDirect" class="secondary" type="button">Clip page</button><button id="clipSelectionDirect" class="secondary" type="button">Clip selection</button></div></div></section>
+      <button id="retryCapture" class="secondary hidden" type="button">Retry pending capture</button>
+      <details><summary>Connection settings</summary><div class="panel"><label>API URL<input id="apiUrl" placeholder="https://api.auroradocs.eu" /></label><label>Workspace ID<input id="workspaceId" placeholder="Workspace ID" /></label></div></details>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
     </main>
     <script src="popup.js" type="module"></script>
   </body>
