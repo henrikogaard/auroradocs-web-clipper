@@ -37,13 +37,18 @@ Do not delete or move the extracted folder while the extension is installed.
 3. In AuroraDocs, open **Settings → Workspace**, copy **Workspace ID**, and
    enter it in the popup. For a self-hosted workspace, ask its administrator
    for both the API URL and Workspace ID.
-4. Enter your AuroraDocs email and password, then select **Sign in**.
+4. Enter your AuroraDocs email and password, then select **Sign in securely**.
 5. If prompted for MFA, use your authenticator code or request and enter an
    email code.
+6. Select **Enable encrypted capture**, open AuroraDocs in a trusted tab, and
+   approve the one-time pairing code for the unlocked workspace.
 
-Sign-in creates an interactive, refreshable AuroraDocs session for this browser
-extension. The session is stored in `chrome.storage.local`; the API URL and
-Workspace ID are stored in extension sync storage.
+Pairing exchanges the interactive session for a scoped clipper credential. The
+extension then encrypts captures locally and sends only opaque envelopes to the
+API. After pairing, clipping continues while AuroraDocs and the desktop app are
+closed. The interactive session is removed after the exchange; scoped
+credentials and the selected workspace key metadata stay in
+`chrome.storage.local`.
 MCP tokens are not used by the Web Clipper and should not be pasted into it.
 
 See [Privacy and permissions](docs/privacy-and-permissions.md) for the complete
@@ -53,11 +58,17 @@ storage, page-access, and deletion behavior.
 
 Open the page you want to save, select the extension, and choose:
 
-- **Clip page** to create an Inbox bookmark with the page title, URL, and
-  description.
-- **Clip selection** to create an Inbox page containing the selected text as a
-  quote. Basic formatting, links, and ordered or unordered lists are preserved;
-  relative links are resolved against the source page.
+- **Clip page** to create an encrypted Inbox bookmark with the page title, URL,
+  and description.
+- **Clip selection** to create an encrypted Inbox page containing the selected
+  text as a quote. Basic formatting, links, and ordered or unordered lists are
+  preserved; relative links are resolved against the source page.
+
+Encrypted captures are held in a server-side opaque pending inbox until a
+trusted AuroraDocs client unlocks the workspace. A retry uses the same capture
+ID and envelope, so a timeout cannot create duplicate clips. If the workspace
+capture key rotates, the locally sealed retry is re-encrypted after the client
+refreshes its authorization.
 
 The `activeTab` and `scripting` permissions allow inspection only after you
 invoke the clipper on the active page. Some browser-managed pages, extension

@@ -11,8 +11,12 @@ const packageFiles = [
   'manifest.json',
   'src/auth.js',
   'src/background.js',
+  'src/captureEnvelope.js',
+  'src/clipperApi.js',
+  'src/clipperState.js',
   'src/popup.html',
   'src/popup.js',
+  'src/popupState.js',
   'src/tiptapHtml.js',
 ]
 
