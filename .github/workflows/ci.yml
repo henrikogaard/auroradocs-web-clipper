@@ -35,5 +35,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: auroradocs-web-clipper
-          path: dist/auroradocs-web-clipper-0.1.1.zip
+          path: dist/auroradocs-web-clipper-0.2.0.zip
           if-no-files-found: error
