@@ -40,4 +40,4 @@ jobs:
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/auroradocs-web-clipper-0.1.1.zip --generate-notes
+        run: gh release create "$GITHUB_REF_NAME" dist/auroradocs-web-clipper-0.2.0.zip --generate-notes
