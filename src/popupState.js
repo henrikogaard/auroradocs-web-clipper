@@ -9,3 +9,8 @@ export function derivePopupState({ session, scopedCredentials, pairing, authoriz
 export function encryptedCaptureSuccessMessage() {
   return 'Encrypted clip queued. It will appear after AuroraDocs unlocks this workspace.'
 }
+
+export function shouldStopPairingPoll(error, expiresAt, now = Date.now()) {
+  if (Date.parse(expiresAt) <= now) return true
+  return error?.status === 400 || error?.status === 403
+}
