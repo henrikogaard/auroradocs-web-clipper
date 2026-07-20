@@ -30,7 +30,8 @@ Do not delete or move the extracted folder while the extension is installed.
 
 1. Open the extension popup.
 2. Keep `https://api.auroradocs.eu`, or enter the API URL supplied by your
-   self-hosted administrator.
+   self-hosted administrator. Self-hosted APIs must use HTTPS; `http://localhost`
+   and `http://127.0.0.1` are allowed for local development.
 3. In AuroraDocs, open **Settings → Workspace** and copy the value from
    **Workspace ID**, then enter it in the popup. For a self-hosted workspace,
    ask its administrator for both the API URL and Workspace ID.
