@@ -107,6 +107,16 @@ test('validateManifest rejects host_permissions containing *://*/*', async () =>
   )
 })
 
+for (const broadPattern of ['https://*/', 'http://*/']) {
+  test(`validateManifest rejects host_permissions containing ${broadPattern}`, async () => {
+    const manifest = { ...validManifest, host_permissions: [broadPattern] }
+    await assert.rejects(
+      () => validateManifest({ manifest, packageVersion: '0.2.1' }),
+      /must not request broad host access/,
+    )
+  })
+}
+
 test('validateManifest rejects missing optional_host_permissions', async () => {
   const { optional_host_permissions, ...manifest } = validManifest
   await assert.rejects(

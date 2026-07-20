@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url'
 
 const requiredPermissions = new Set(['activeTab', 'scripting', 'storage'])
 
-const broadHostPatterns = new Set(['<all_urls>', '*://*/*', 'https://*/*', 'http://*/*', '*://*/'])
+const broadHostPatterns = new Set(['<all_urls>', '*://*/*', 'https://*/*', 'http://*/*', '*://*/', 'https://*/', 'http://*/'])
 
 export async function validateManifest({ manifest, packageVersion }) {
   for (const permission of requiredPermissions) {

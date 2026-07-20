@@ -15,12 +15,13 @@ export async function ensureHostPermission(apiUrl, permissions = globalThis.chro
     throw new Error('Self-hosted APIs must use HTTPS. Only http://localhost and http://127.0.0.1 are allowed for development.')
   }
 
-  const origins = [`${url.origin}/*`]
+  // Chrome match patterns do not accept ports. Omitting the port also makes
+  // localhost patterns match every development port.
+  const origin = `${url.protocol}//${url.hostname}`
+  const origins = [`${origin}/*`]
 
-  const granted = await permissions.contains({ origins })
-  if (granted) {
-    return true
-  }
-
+  // Request before any await so Chrome can associate the optional permission
+  // prompt with the user's click gesture. Requesting an already-granted
+  // origin resolves true without displaying another prompt.
   return permissions.request({ origins })
 }
