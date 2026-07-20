@@ -86,6 +86,40 @@ test('throws a clear error for a non-http(s) URL', async () => {
   }
   await assert.rejects(
     () => ensureHostPermission('file:///etc/hosts', permissions),
-    /valid http\(s\) API URL/,
+    /must use HTTPS|valid http\(s\) API URL/,
   )
+})
+
+test('rejects non-localhost HTTP origins with a clear HTTPS-only message', async () => {
+  const permissions = {
+    contains: async () => true,
+    request: async () => true,
+  }
+  await assert.rejects(
+    () => ensureHostPermission('http://self-hosted.example.com', permissions),
+    /must use HTTPS/,
+  )
+})
+
+test('allows http://localhost for development', async () => {
+  const calls = []
+  const permissions = {
+    contains: async (payload) => { calls.push(['contains', payload]); return false },
+    request: async (payload) => { calls.push(['request', payload]); return true },
+  }
+  const result = await ensureHostPermission('http://localhost:3000/api', permissions)
+  assert.equal(result, true)
+  assert.deepEqual(calls, [
+    ['contains', { origins: ['http://localhost:3000/*'] }],
+    ['request', { origins: ['http://localhost:3000/*'] }],
+  ])
+})
+
+test('allows http://127.0.0.1 for development', async () => {
+  const permissions = {
+    contains: async () => false,
+    request: async () => true,
+  }
+  const result = await ensureHostPermission('http://127.0.0.1:8080', permissions)
+  assert.equal(result, true)
 })
