@@ -107,7 +107,7 @@ test('validateManifest rejects host_permissions containing *://*/*', async () =>
   )
 })
 
-for (const broadPattern of ['https://*/', 'http://*/']) {
+for (const broadPattern of ['https://*/', 'http://*/', 'https://*/foo*', '*://*/api']) {
   test(`validateManifest rejects host_permissions containing ${broadPattern}`, async () => {
     const manifest = { ...validManifest, host_permissions: [broadPattern] }
     await assert.rejects(
