@@ -3,6 +3,13 @@ import { pathToFileURL } from 'node:url'
 
 const requiredPermissions = new Set(['activeTab', 'scripting', 'storage'])
 
+const broadHostPatterns = new Set(['<all_urls>'])
+const broadWildcardHostPattern = /^(?:https?|\*):\/\/\*\//
+
+function isBroadHostPattern(value) {
+  return typeof value === 'string' && (broadHostPatterns.has(value) || broadWildcardHostPattern.test(value))
+}
+
 export async function validateManifest({ manifest, packageVersion }) {
   for (const permission of requiredPermissions) {
     if (!manifest.permissions?.includes(permission)) {
@@ -24,6 +31,16 @@ export async function validateManifest({ manifest, packageVersion }) {
 
   if (!manifest.background?.service_worker) {
     throw new Error('manifest.json must define background.service_worker')
+  }
+
+  const requiredHosts = manifest.host_permissions ?? []
+  const broadRequired = requiredHosts.find(isBroadHostPattern)
+  if (broadRequired) {
+    throw new Error(`AuroraDocs Web Clipper must not request broad host access (${broadRequired})`)
+  }
+
+  if (!manifest.optional_host_permissions?.includes('https://*/*')) {
+    throw new Error('manifest.json must declare optional_host_permissions containing "https://*/*"')
   }
 
   await readFile(new URL(`../${manifest.action.default_popup}`, import.meta.url), 'utf8')

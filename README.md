@@ -18,7 +18,7 @@ the extension must send clips to an AuroraCloud-compatible API.
 
 ## Install from a release
 
-1. Download `auroradocs-web-clipper-0.2.0.zip` from the v0.2.0 release and
+1. Download `auroradocs-web-clipper-0.2.1.zip` from the v0.2.1 release and
    extract it to a folder you will keep on your computer.
 2. Open `chrome://extensions`.
 3. Enable **Developer mode**.
@@ -33,7 +33,8 @@ Do not delete or move the extracted folder while the extension is installed.
 
 1. Open the extension popup.
 2. Keep the production API URL, `https://api.auroradocs.eu`, or enter the URL
-   supplied by your self-hosted administrator.
+   supplied by your self-hosted administrator. Self-hosted APIs must use HTTPS;
+   `http://localhost` and `http://127.0.0.1` are allowed for local development.
 3. In AuroraDocs, open **Settings → Workspace**, copy **Workspace ID**, and
    enter it in the popup. For a self-hosted workspace, ask its administrator
    for both the API URL and Workspace ID.

@@ -11,7 +11,8 @@ not include telemetry or analytics.
 | `activeTab` | Gives temporary access to the active page after you invoke the extension. |
 | `scripting` | Runs the capture script in that user-invoked active page to read its title, URL, description, and selected content. |
 | `storage` | Stores connection settings and the signed-in extension session in browser-managed extension storage. |
-| API host permissions | The production API and localhost are available by default. A self-hosted HTTPS API is requested only when you explicitly configure that origin. |
+| `host_permissions` | Allows network requests to the default AuroraCloud API (`https://api.auroradocs.eu`) and local development servers (`http://localhost`, `http://127.0.0.1`). Page capture uses `activeTab` and `scripting`, not broad host access. |
+| `optional_host_permissions` | Declares that the extension may request access to a user-configured HTTPS self-hosted API origin at runtime. The user must grant this access before the clipper can talk to that origin. Non-localhost HTTP origins are not supported — use HTTPS for any self-hosted API. |
 
 The `activeTab` and `scripting` permissions inspect only the active page in
 response to a user-invoked clip action. The extension does not inspect other
