@@ -84,7 +84,7 @@ jobs:
       - name: Download the published GitHub release asset
         run: |
           mkdir release
-          gh release download "$GITHUB_REF_NAME" --pattern "$ASSET_NAME" --dir release
+          gh release download "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --pattern "$ASSET_NAME" --dir release
           test -f "release/$ASSET_NAME"
           ASSET_SHA256="$(sha256sum "release/$ASSET_NAME" | awk '{print $1}')"
           printf '%s  %s\n' "$ASSET_SHA256" "$ASSET_NAME" | sha256sum --check
@@ -120,9 +120,13 @@ jobs:
           case "$asset" in auroradocs-web-clipper-*.zip) ;; *) echo "Unexpected asset name" >&2; exit 1 ;; esac
           test "$(sha256sum "$stage/$asset" | awk '{print $1}')" = "$expected_sha256"
           release_dir="$root/releases/$tag"
-          test ! -e "$release_dir"
-          install -d -m 0755 "$release_dir"
-          install -m 0644 "$stage/$asset" "$release_dir/$asset"
+          if [ -e "$release_dir" ]; then
+            test -f "$release_dir/$asset"
+            test "$(sha256sum "$release_dir/$asset" | awk '{print $1}')" = "$expected_sha256"
+          else
+            install -d -m 0755 "$release_dir"
+            install -m 0644 "$stage/$asset" "$release_dir/$asset"
+          fi
           install -m 0644 "$stage/latest.json" "$root/.latest.json.$tag"
           mv "$root/.latest.json.$tag" "$root/latest.json"
           rm -f "$stage/$asset" "$stage/latest.json"
@@ -132,7 +136,7 @@ jobs:
         run: |
           LATEST_URL=https://downloads.auroradocs.eu/web-clipper/latest.json
           curl --fail --silent --show-error --location "$LATEST_URL" --output published-latest.json
-          curl --fail --silent --show-error --head "$LATEST_URL" | grep -i '^access-control-allow-origin: \*$'
+          curl --fail --silent --show-error --head "$LATEST_URL" | tr -d '\r' | grep -i '^access-control-allow-origin: \*$'
           node --input-type=module <<'NODE'
           import { readFile } from 'node:fs/promises'
           const manifest = JSON.parse(await readFile('published-latest.json', 'utf8'))

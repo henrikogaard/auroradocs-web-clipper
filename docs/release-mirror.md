@@ -10,8 +10,9 @@ https://downloads.auroradocs.eu/web-clipper/releases/vX.Y.Z/
 https://downloads.auroradocs.eu/web-clipper/latest.json
 ```
 
-The workflow never replaces a versioned release directory. It updates
-`latest.json` atomically after placing the new versioned ZIP.
+The workflow never replaces a versioned ZIP. A rerun accepts an existing
+version directory only when its ZIP has the same verified SHA-256, then updates
+`latest.json` atomically.
 
 ## One-time production setup
 
