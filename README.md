@@ -18,8 +18,10 @@ the extension must send clips to an AuroraCloud-compatible API.
 
 ## Install from a release
 
-1. Download `auroradocs-web-clipper-0.2.1.zip` from the v0.2.1 release and
-   extract it to a folder you will keep on your computer.
+1. Download the latest published AuroraDocs Web Clipper ZIP from the
+   [AuroraDocs download page](https://auroradocs.eu/download.html) or the
+   [public releases page](https://github.com/henrikogaard/auroradocs-web-clipper/releases),
+   then extract it to a folder you will keep on your computer.
 2. Open `chrome://extensions`.
 3. Enable **Developer mode**.
 4. Select **Load unpacked** and choose the extracted extension folder (the
@@ -28,6 +30,10 @@ the extension must send clips to an AuroraCloud-compatible API.
    visible in the toolbar.
 
 Do not delete or move the extracted folder while the extension is installed.
+
+Release artifacts are published to GitHub Releases first, then mirrored to the
+AuroraDocs downloads host. See [release mirror operations](docs/release-mirror.md)
+for the protected workflow and required deployment setup.
 
 ## Connect AuroraDocs
 

@@ -27,6 +27,12 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+      - name: Resolve release asset
+        id: package
+        run: |
+          PACKAGE_VERSION="$(node --input-type=module --eval "import pkg from './package.json' with { type: 'json' }; process.stdout.write(pkg.version)")"
+          ASSET_NAME="auroradocs-web-clipper-${PACKAGE_VERSION}.zip"
+          printf 'asset_name=%s\n' "$ASSET_NAME" >> "$GITHUB_OUTPUT"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Check and package
@@ -35,5 +41,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: auroradocs-web-clipper
-          path: dist/auroradocs-web-clipper-0.2.1.zip
+          path: dist/${{ steps.package.outputs.asset_name }}
           if-no-files-found: error

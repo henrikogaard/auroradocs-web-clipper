@@ -12,6 +12,9 @@ jobs:
   release:
     name: release
     runs-on: ubuntu-latest
+    outputs:
+      asset_name: ${{ steps.package.outputs.asset_name }}
+      version: ${{ steps.package.outputs.version }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -28,16 +31,117 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Verify tag matches package version
+      - name: Check and package the tagged release
+        id: package
         run: |
-          package_version="$(node --input-type=module --eval "import pkg from './package.json' with { type: 'json' }; process.stdout.write(pkg.version)")"
-          if [ "$GITHUB_REF_NAME" != "v${package_version}" ]; then
-            echo "Tag $GITHUB_REF_NAME does not match package version v${package_version}." >&2
+          PACKAGE_VERSION="$(node --input-type=module --eval "import pkg from './package.json' with { type: 'json' }; process.stdout.write(pkg.version)")"
+          if [ "$GITHUB_REF_NAME" != "v${PACKAGE_VERSION}" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package version v${PACKAGE_VERSION}." >&2
             exit 1
           fi
-      - name: Check and package
-        run: pnpm check
+          ASSET_NAME="auroradocs-web-clipper-${PACKAGE_VERSION}.zip"
+          ASSET_PATH="dist/${ASSET_NAME}"
+          pnpm check
+          test -f "$ASSET_PATH"
+          printf 'asset_name=%s\nversion=%s\n' "$ASSET_NAME" "$PACKAGE_VERSION" >> "$GITHUB_OUTPUT"
       - name: Create GitHub release
         env:
+          ASSET_PATH: dist/${{ steps.package.outputs.asset_name }}
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/auroradocs-web-clipper-0.2.1.zip --generate-notes
+        run: gh release create "$GITHUB_REF_NAME" "$ASSET_PATH" --generate-notes
+
+  mirror-downloads:
+    name: mirror downloads
+    needs: release
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://downloads.auroradocs.eu/web-clipper/latest.json
+    env:
+      ASSET_NAME: ${{ needs.release.outputs.asset_name }}
+      DEPLOY_HOST: ${{ secrets.AURORA_DOWNLOADS_HOST }}
+      DEPLOY_KNOWN_HOSTS: ${{ secrets.AURORA_DOWNLOADS_KNOWN_HOSTS }}
+      DEPLOY_PRIVATE_KEY: ${{ secrets.AURORA_DOWNLOADS_SSH_PRIVATE_KEY }}
+      DEPLOY_USER: ${{ secrets.AURORA_DOWNLOADS_USER }}
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_VERSION: ${{ needs.release.outputs.version }}
+    steps:
+      - name: Require dedicated production deploy configuration
+        run: |
+          for name in DEPLOY_HOST DEPLOY_KNOWN_HOSTS DEPLOY_PRIVATE_KEY DEPLOY_USER; do
+            if [ -z "${!name}" ]; then
+              echo "Missing required production secret: $name" >&2
+              exit 1
+            fi
+          done
+      - name: Configure pinned SSH access
+        run: |
+          install -d -m 700 "$HOME/.ssh"
+          printf '%s\n' "$DEPLOY_PRIVATE_KEY" > "$HOME/.ssh/id_ed25519"
+          chmod 600 "$HOME/.ssh/id_ed25519"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+      - name: Download the published GitHub release asset
+        run: |
+          mkdir release
+          gh release download "$GITHUB_REF_NAME" --pattern "$ASSET_NAME" --dir release
+          test -f "release/$ASSET_NAME"
+          ASSET_SHA256="$(sha256sum "release/$ASSET_NAME" | awk '{print $1}')"
+          printf '%s  %s\n' "$ASSET_SHA256" "$ASSET_NAME" | sha256sum --check
+          printf '%s\n' "$ASSET_SHA256" > release/asset.sha256
+          export ASSET_SHA256
+          node --input-type=module <<'NODE' > release/latest.json
+          const manifest = {
+            asset: process.env.ASSET_NAME,
+            sha256: process.env.ASSET_SHA256,
+            url: `https://downloads.auroradocs.eu/web-clipper/releases/v${process.env.RELEASE_VERSION}/${process.env.ASSET_NAME}`,
+            version: process.env.RELEASE_VERSION,
+          }
+          process.stdout.write(`${JSON.stringify(manifest, null, 2)}\n`)
+          NODE
+      - name: Mirror the verified ZIP atomically
+        env:
+          ASSET_SHA256_FILE: release/asset.sha256
+        run: |
+          REMOTE_STAGE="/tmp/auroradocs-web-clipper-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          TARGET="${DEPLOY_USER}@${DEPLOY_HOST}"
+          SSH=(ssh -i "$HOME/.ssh/id_ed25519" -o StrictHostKeyChecking=yes)
+          SCP=(scp -i "$HOME/.ssh/id_ed25519" -o StrictHostKeyChecking=yes)
+          "${SSH[@]}" "$TARGET" "install -d -m 700 '$REMOTE_STAGE'"
+          "${SCP[@]}" "release/$ASSET_NAME" release/latest.json "$TARGET:$REMOTE_STAGE/"
+          "${SSH[@]}" "$TARGET" bash -s -- "$REMOTE_STAGE" "$GITHUB_REF_NAME" "$ASSET_NAME" "$(cat "$ASSET_SHA256_FILE")" <<'REMOTE'
+          set -euo pipefail
+          stage="$1"
+          tag="$2"
+          asset="$3"
+          expected_sha256="$4"
+          root=/var/www/auroradocs-downloads/web-clipper
+          case "$tag" in v[0-9]*.[0-9]*.[0-9]*) ;; *) echo "Unexpected release tag" >&2; exit 1 ;; esac
+          case "$asset" in auroradocs-web-clipper-*.zip) ;; *) echo "Unexpected asset name" >&2; exit 1 ;; esac
+          test "$(sha256sum "$stage/$asset" | awk '{print $1}')" = "$expected_sha256"
+          release_dir="$root/releases/$tag"
+          test ! -e "$release_dir"
+          install -d -m 0755 "$release_dir"
+          install -m 0644 "$stage/$asset" "$release_dir/$asset"
+          install -m 0644 "$stage/latest.json" "$root/.latest.json.$tag"
+          mv "$root/.latest.json.$tag" "$root/latest.json"
+          rm -f "$stage/$asset" "$stage/latest.json"
+          rmdir "$stage"
+          REMOTE
+      - name: Verify the public mirror
+        run: |
+          LATEST_URL=https://downloads.auroradocs.eu/web-clipper/latest.json
+          curl --fail --silent --show-error --location "$LATEST_URL" --output published-latest.json
+          curl --fail --silent --show-error --head "$LATEST_URL" | grep -i '^access-control-allow-origin: \*$'
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises'
+          const manifest = JSON.parse(await readFile('published-latest.json', 'utf8'))
+          if (manifest.version !== process.env.RELEASE_VERSION || manifest.asset !== process.env.ASSET_NAME) {
+            throw new Error('Published manifest does not match this release')
+          }
+          if (typeof manifest.url !== 'string' || !manifest.url.startsWith('https://downloads.auroradocs.eu/web-clipper/releases/')) {
+            throw new Error('Published manifest has an unexpected asset URL')
+          }
+          NODE
+          curl --fail --silent --show-error --location "https://downloads.auroradocs.eu/web-clipper/releases/${GITHUB_REF_NAME}/${ASSET_NAME}" --output published.zip
+          printf '%s  %s\n' "$(cat release/asset.sha256)" published.zip | sha256sum --check
