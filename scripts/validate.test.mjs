@@ -36,7 +36,7 @@ test('dedicated setup guide covers install, connection, verification, updates, a
   assert.match(readme, /\[Setup guide\]\(docs\/setup\.md\)/)
   for (const text of [
     '# Setup',
-    'auroradocs-web-clipper-0.2.1.zip',
+    'latest published ZIP',
     'chrome://extensions',
     'Load unpacked',
     'https://api.auroradocs.eu',
@@ -56,17 +56,17 @@ test('dedicated setup guide covers install, connection, verification, updates, a
   }
 })
 
-test('public release surfaces use the standalone 0.2.1 archive name', async () => {
-  const expectedArchive = 'auroradocs-web-clipper-0.2.1.zip'
+test('public release surfaces derive the archive name from the package version', async () => {
   const bugTemplate = await readFile(new URL('../.github/ISSUE_TEMPLATE/bug.yml', import.meta.url), 'utf8')
   const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8')
   const ciWorkflow = await readFile(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
   const releaseWorkflow = await readFile(new URL('../.github/workflows/release.yml', import.meta.url), 'utf8')
 
   assert.doesNotMatch(bugTemplate, /0\.9\.2/)
-  assert.match(readme, new RegExp(expectedArchive.replaceAll('.', '\\.')))
-  assert.match(ciWorkflow, new RegExp(expectedArchive.replaceAll('.', '\\.')))
-  assert.match(releaseWorkflow, new RegExp(expectedArchive.replaceAll('.', '\\.')))
+  assert.match(readme, /AuroraDocs download page/)
+  assert.match(readme, /release mirror operations/)
+  assert.match(ciWorkflow, /ASSET_NAME="auroradocs-web-clipper-\$\{PACKAGE_VERSION\}\.zip"/)
+  assert.match(releaseWorkflow, /ASSET_NAME="auroradocs-web-clipper-\$\{PACKAGE_VERSION\}\.zip"/)
 })
 
 const validManifest = {
