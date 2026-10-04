@@ -1,6 +1,6 @@
 # Setup
 
-This guide installs the latest published AuroraDocs Web Clipper, connects it to
+This guide installs the latest published Aurora Web Clipper, connects it to
 one AuroraCloud-compatible workspace, and verifies a first capture.
 
 ## Requirements
@@ -8,7 +8,7 @@ one AuroraCloud-compatible workspace, and verifies a first capture.
 - a Chromium-based browser with Manifest V3 extension support
 - an AuroraCloud or compatible self-hosted workspace
 - the workspace API URL and Workspace ID
-- an AuroraDocs email and password with access to the workspace
+- an Aurora email and password with access to the workspace
 
 Browser-only and Local folders workspaces are not supported because the
 extension sends clips to an AuroraCloud-compatible API.
@@ -16,27 +16,27 @@ extension sends clips to an AuroraCloud-compatible API.
 ## Install the release
 
 1. Download the latest published ZIP from the
-   [AuroraDocs download page](https://auroradocs.eu/download.html) or the
+   [Aurora download page](https://aurora.ink/download.html) or the
    [GitHub releases page](https://github.com/henrikogaard/auroradocs-web-clipper/releases).
 2. Extract the ZIP to a stable folder that will remain on your computer.
 3. Open `chrome://extensions`.
 4. Enable **Developer mode**.
 5. Select **Load unpacked** and choose the extracted folder containing
    `manifest.json`.
-6. Pin AuroraDocs Web Clipper from the browser Extensions menu if desired.
+6. Pin Aurora Web Clipper from the browser Extensions menu if desired.
 
 Do not delete or move the extracted folder while the extension is installed.
 
-## Connect AuroraDocs
+## Connect Aurora
 
 1. Open the extension popup.
-2. Keep `https://api.auroradocs.eu`, or enter the API URL supplied by your
+2. Keep `https://api.aurora.ink`, or enter the API URL supplied by your
    self-hosted administrator. Self-hosted APIs must use HTTPS; `http://localhost`
    and `http://127.0.0.1` are allowed for local development.
-3. In AuroraDocs, open **Settings → Workspace** and copy the value from
+3. In Aurora, open **Settings → Workspace** and copy the value from
    **Workspace ID**, then enter it in the popup. For a self-hosted workspace,
    ask its administrator for both the API URL and Workspace ID.
-4. Enter your AuroraDocs email and password, then select **Sign in**.
+4. Enter your Aurora email and password, then select **Sign in**.
 5. If MFA is required, enter an authenticator code or request an email code.
 
 The extension stores its refreshable session in `chrome.storage.local`; the API
@@ -47,7 +47,7 @@ Web Clipper and must not be pasted into it.
 
 1. Open a normal web page that you are allowed to save.
 2. Open the extension and choose **Clip page**.
-3. Open the AuroraDocs Inbox and confirm the bookmark title and source URL.
+3. Open the Aurora Inbox and confirm the bookmark title and source URL.
 4. Select text on a page, open the extension, and choose **Clip selection**.
 5. Confirm the Inbox page contains the selected content and source link.
 
@@ -68,12 +68,12 @@ captured.
 
 ## Sign out or Uninstall
 
-- Select **Sign out** in the popup to delete the local AuroraDocs session.
+- Select **Sign out** in the popup to delete the local Aurora session.
 - Remove the extension from `chrome://extensions` to delete its local session
   from that browser profile.
 - Connection settings may remain in another synced browser profile; remove the
   extension there as well when required.
-- Clips already stored in AuroraDocs are not deleted when the extension is
+- Clips already stored in Aurora are not deleted when the extension is
   removed.
 
 For common failures, see [Troubleshooting](troubleshooting.md). For storage and

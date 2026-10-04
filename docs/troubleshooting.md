@@ -11,8 +11,8 @@
 ## Sign-in fails
 
 - Confirm the API URL is correct. The production service is
-  `https://api.auroradocs.eu`.
-- Confirm the email and password belong to an AuroraDocs account, not an MCP
+  `https://api.aurora.ink`.
+- Confirm the email and password belong to an Aurora account, not an MCP
   integration. MCP tokens cannot sign in to the Web Clipper.
 - If MFA is required, enter the current authenticator code or request an email
   code and check the account's inbox.
@@ -22,14 +22,14 @@
 ## Pairing or encrypted capture fails
 
 - Sign in, choose **Enable encrypted capture**, and approve the displayed code
-  in a trusted AuroraDocs tab while the destination workspace is unlocked.
+  in a trusted Aurora tab while the destination workspace is unlocked.
 - Pairing codes expire after a short window. Cancel the old request and start a
   new pairing if approval is delayed.
 - If the clipper says authorization is stale, disconnect it and pair again. A
   workspace administrator may have revoked this browser or rotated its capture
   key.
 - A successful encrypted clip may briefly show as pending. It appears in Inbox
-  after a trusted AuroraDocs client unlocks and materializes the workspace.
+  after a trusted Aurora client unlocks and materializes the workspace.
 
 ## A clip is not saved
 
@@ -45,7 +45,7 @@
 
 ## Settings or sign-in state changed
 
-The API URL and Workspace ID use `chrome.storage.sync`, while the AuroraDocs
+The API URL and Workspace ID use `chrome.storage.sync`, while the Aurora
 session uses `chrome.storage.local`. Browser profile changes, extension sync
 settings, clearing site/extension data, or reinstalling the extension can
 therefore affect them differently.
