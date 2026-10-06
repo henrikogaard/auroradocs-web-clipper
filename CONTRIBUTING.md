@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for helping improve AuroraDocs Web Clipper.
+Thank you for helping improve Aurora Web Clipper.
 
 ## Before you start
 
