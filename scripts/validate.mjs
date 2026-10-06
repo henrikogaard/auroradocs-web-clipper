@@ -18,7 +18,7 @@ export async function validateManifest({ manifest, packageVersion }) {
   }
 
   if (manifest.manifest_version !== 3) {
-    throw new Error('AuroraDocs Web Clipper must stay on Manifest V3')
+    throw new Error('Aurora Web Clipper must stay on Manifest V3')
   }
 
   if (manifest.version !== packageVersion) {
@@ -36,7 +36,7 @@ export async function validateManifest({ manifest, packageVersion }) {
   const requiredHosts = manifest.host_permissions ?? []
   const broadRequired = requiredHosts.find(isBroadHostPattern)
   if (broadRequired) {
-    throw new Error(`AuroraDocs Web Clipper must not request broad host access (${broadRequired})`)
+    throw new Error(`Aurora Web Clipper must not request broad host access (${broadRequired})`)
   }
 
   if (!manifest.optional_host_permissions?.includes('https://*/*')) {
@@ -53,7 +53,7 @@ async function main() {
 
   await validateManifest({ manifest, packageVersion: pkg.version })
 
-  console.log('AuroraDocs Web Clipper manifest is valid.')
+  console.log('Aurora Web Clipper manifest is valid.')
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

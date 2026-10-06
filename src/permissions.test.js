@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { ensureHostPermission } from './permissions.js'
+import { requestClipperApiOriginPermission } from './clipperApi.js'
 
 test('returns true when permission is already granted', async () => {
   let requested = 0
@@ -152,4 +153,24 @@ test('omits ports from HTTPS host permission patterns', async () => {
   await ensureHostPermission('https://self.example.com:8443/api', permissions)
 
   assert.deepEqual(calls, [{ origins: ['https://self.example.com/*'] }])
+})
+
+for (const origin of ['https://api.aurora.ink', 'https://api.auroradocs.eu']) {
+  test(`pairing uses the declared hosted permission for ${origin}`, async () => {
+    let requests = 0
+    const allowed = await requestClipperApiOriginPermission(origin, {
+      request: async () => { requests += 1; return false },
+    })
+    assert.equal(allowed, true)
+    assert.equal(requests, 0)
+  })
+}
+
+test('a similar hostname still requires explicit permission', async () => {
+  const requests = []
+  const allowed = await requestClipperApiOriginPermission('https://api.aurora.ink.example.com', {
+    request: async (payload) => { requests.push(payload); return false },
+  })
+  assert.equal(allowed, false)
+  assert.deepEqual(requests, [{ origins: ['https://api.aurora.ink.example.com/*'] }])
 })

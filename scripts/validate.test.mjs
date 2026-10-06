@@ -14,7 +14,7 @@ test('README documents public installation, authentication, and privacy behavior
   const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8')
   const requiredStatements = [
     'Load unpacked',
-    'https://api.auroradocs.eu',
+    'https://api.aurora.ink',
     'Workspace ID',
     'MFA',
     'chrome.storage.local',
@@ -39,7 +39,7 @@ test('dedicated setup guide covers install, connection, verification, updates, a
     'latest published ZIP',
     'chrome://extensions',
     'Load unpacked',
-    'https://api.auroradocs.eu',
+    'https://api.aurora.ink',
     'Workspace ID',
     'Settings → Workspace',
     'email and password',
@@ -63,7 +63,7 @@ test('public release surfaces derive the archive name from the package version',
   const releaseWorkflow = await readFile(new URL('../.github/workflows/release.yml', import.meta.url), 'utf8')
 
   assert.doesNotMatch(bugTemplate, /0\.9\.2/)
-  assert.match(readme, /AuroraDocs download page/)
+  assert.match(readme, /Aurora download page/)
   assert.match(readme, /release mirror operations/)
   assert.match(ciWorkflow, /ASSET_NAME="auroradocs-web-clipper-\$\{PACKAGE_VERSION\}\.zip"/)
   assert.match(releaseWorkflow, /ASSET_NAME="auroradocs-web-clipper-\$\{PACKAGE_VERSION\}\.zip"/)
@@ -75,7 +75,7 @@ const validManifest = {
   action: { default_popup: 'src/popup.html' },
   background: { service_worker: 'src/background.js' },
   permissions: ['activeTab', 'scripting', 'storage'],
-  host_permissions: ['https://api.auroradocs.eu/*', 'http://localhost/*', 'http://127.0.0.1/*'],
+  host_permissions: ['https://api.aurora.ink/*', 'https://api.auroradocs.eu/*', 'http://localhost/*', 'http://127.0.0.1/*'],
   optional_host_permissions: ['https://*/*'],
 }
 

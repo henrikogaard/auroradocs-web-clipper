@@ -1,6 +1,6 @@
-# AuroraDocs Web Clipper
+# Aurora Web Clipper
 
-AuroraDocs Web Clipper is a Manifest V3 browser extension that saves the active
+Aurora Web Clipper is a Manifest V3 browser extension that saves the active
 page or selected content to the Inbox of an AuroraCloud workspace.
 
 For an end-to-end installation walkthrough, use the dedicated
@@ -11,48 +11,48 @@ For an end-to-end installation walkthrough, use the dedicated
 - A Chromium-based browser that supports Manifest V3 extensions
 - An AuroraCloud or compatible self-hosted workspace
 - Your workspace's API URL and Workspace ID
-- An AuroraDocs account with access to that workspace
+- An Aurora account with access to that workspace
 
 Browser-only workspaces and Local folders workspaces are not supported because
 the extension must send clips to an AuroraCloud-compatible API.
 
 ## Install from a release
 
-1. Download the latest published AuroraDocs Web Clipper ZIP from the
-   [AuroraDocs download page](https://auroradocs.eu/download.html) or the
+1. Download the latest published Aurora Web Clipper ZIP from the
+   [Aurora download page](https://aurora.ink/download.html) or the
    [public releases page](https://github.com/henrikogaard/auroradocs-web-clipper/releases),
    then extract it to a folder you will keep on your computer.
 2. Open `chrome://extensions`.
 3. Enable **Developer mode**.
 4. Select **Load unpacked** and choose the extracted extension folder (the
    folder containing `manifest.json`).
-5. Pin AuroraDocs Web Clipper from the browser's Extensions menu if you want it
+5. Pin Aurora Web Clipper from the browser's Extensions menu if you want it
    visible in the toolbar.
 
 Do not delete or move the extracted folder while the extension is installed.
 
 Release artifacts are published to GitHub Releases first, then mirrored to the
-AuroraDocs downloads host. See [release mirror operations](docs/release-mirror.md)
+Aurora downloads host. See [release mirror operations](docs/release-mirror.md)
 for the protected workflow and required deployment setup.
 
-## Connect AuroraDocs
+## Connect Aurora
 
 1. Open the extension popup.
-2. Keep the production API URL, `https://api.auroradocs.eu`, or enter the URL
+2. Keep the production API URL, `https://api.aurora.ink`, or enter the URL
    supplied by your self-hosted administrator. Self-hosted APIs must use HTTPS;
    `http://localhost` and `http://127.0.0.1` are allowed for local development.
-3. In AuroraDocs, open **Settings → Workspace**, copy **Workspace ID**, and
+3. In Aurora, open **Settings → Workspace**, copy **Workspace ID**, and
    enter it in the popup. For a self-hosted workspace, ask its administrator
    for both the API URL and Workspace ID.
-4. Enter your AuroraDocs email and password, then select **Sign in securely**.
+4. Enter your Aurora email and password, then select **Sign in securely**.
 5. If prompted for MFA, use your authenticator code or request and enter an
    email code.
-6. Select **Enable encrypted capture**, open AuroraDocs in a trusted tab, and
+6. Select **Enable encrypted capture**, open Aurora in a trusted tab, and
    approve the one-time pairing code for the unlocked workspace.
 
 Pairing exchanges the interactive session for a scoped clipper credential. The
 extension then encrypts captures locally and sends only opaque envelopes to the
-API. After pairing, clipping continues while AuroraDocs and the desktop app are
+API. After pairing, clipping continues while Aurora and the desktop app are
 closed. The interactive session is removed after the exchange; scoped
 credentials and the selected workspace key metadata stay in
 `chrome.storage.local`.
@@ -72,7 +72,7 @@ Open the page you want to save, select the extension, and choose:
   preserved; relative links are resolved against the source page.
 
 Encrypted captures are held in a server-side opaque pending inbox until a
-trusted AuroraDocs client unlocks the workspace. A retry uses the same capture
+trusted Aurora client unlocks the workspace. A retry uses the same capture
 ID and envelope, so a timeout cannot create duplicate clips. If the workspace
 capture key rotates, the locally sealed retry is re-encrypted after the client
 refreshes its authorization.
@@ -94,11 +94,11 @@ pages, and protected store pages cannot be captured.
 
 ## Sign out or uninstall
 
-Select **Sign out** in the popup to delete the locally stored AuroraDocs session.
+Select **Sign out** in the popup to delete the locally stored Aurora session.
 The API URL and Workspace ID remain so the extension can be reconnected easily.
 Removing the extension deletes its local session from that browser profile.
 Connection settings use browser sync and may exist in another synced profile;
-remove the extension there as well if needed. Clips already saved in AuroraDocs
+remove the extension there as well if needed. Clips already saved in Aurora
 are not deleted.
 
 ## Support and security
@@ -120,3 +120,8 @@ Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the
 ## License
 
 Licensed under the Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+The default API is `https://api.aurora.ink`. The previous
+`https://api.auroradocs.eu` hostname remains supported, including existing saved
+connection settings. This rebrand keeps the extension identity, archive names,
+local sessions, and encrypted capture protocol unchanged.

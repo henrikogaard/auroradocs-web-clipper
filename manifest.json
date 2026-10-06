@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "AuroraDocs Web Clipper",
-  "description": "Capture pages and selections into AuroraDocs Inbox.",
+  "name": "Aurora Web Clipper",
+  "description": "Capture pages and selections into Aurora Inbox.",
   "version": "0.2.1",
   "action": {
-    "default_title": "Clip to AuroraDocs",
+    "default_title": "Clip to Aurora",
     "default_popup": "src/popup.html"
   },
   "background": {
@@ -12,6 +12,6 @@
     "type": "module"
   },
   "permissions": ["activeTab", "scripting", "storage"],
-  "host_permissions": ["https://api.auroradocs.eu/*", "http://localhost/*", "http://127.0.0.1/*"],
+  "host_permissions": ["https://api.aurora.ink/*", "https://api.auroradocs.eu/*", "http://localhost/*", "http://127.0.0.1/*"],
   "optional_host_permissions": ["https://*/*"]
 }

@@ -18,3 +18,12 @@ test('release workflow publishes and mirrors the dynamically versioned clipper Z
   assert.match(workflow, /if \[ -e "\$release_dir" \]; then/)
   assert.match(workflow, /sha256sum "\$release_dir\/\$asset"/)
 })
+
+test('release workflow writes and verifies aurora.ink download links', async () => {
+  const workflow = await readFile(new URL('../.github/workflows/release.yml', import.meta.url), 'utf8')
+
+  assert.match(workflow, /url: https:\/\/downloads\.aurora\.ink\/web-clipper\/latest\.json/)
+  assert.match(workflow, /url: `https:\/\/downloads\.aurora\.ink\/web-clipper\/releases\/v\$\{process\.env\.RELEASE_VERSION\}\//)
+  assert.match(workflow, /LATEST_URL=https:\/\/downloads\.aurora\.ink\/web-clipper\/latest\.json/)
+  assert.doesNotMatch(workflow, /downloads\.auroradocs\.eu/)
+})

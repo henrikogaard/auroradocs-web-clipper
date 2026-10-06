@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping improve AuroraDocs Web Clipper. Do not include credentials, tokens, MFA codes, workspace contents, or production user data. Report suspected vulnerabilities privately using SECURITY.md.
+        Thanks for helping improve Aurora Web Clipper. Do not include credentials, tokens, MFA codes, workspace contents, or production user data. Report suspected vulnerabilities privately using SECURITY.md.
   - type: input
     id: version
     attributes:

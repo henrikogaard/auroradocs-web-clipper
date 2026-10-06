@@ -1,4 +1,4 @@
-export const DEFAULT_API_URL = 'https://api.auroradocs.eu'
+export const DEFAULT_API_URL = 'https://api.aurora.ink'
 
 export class AuroraClipperApiError extends Error {
   constructor(message, status, payload) {
@@ -118,7 +118,7 @@ export async function createRecordWithSession({
 
 async function postRecord({ apiUrl, session, collection, body, fetchImpl }) {
   if (!session?.accessToken) {
-    throw new AuroraClipperApiError('Sign in to AuroraDocs before clipping.', 401, {})
+    throw new AuroraClipperApiError('Sign in to Aurora before clipping.', 401, {})
   }
   return requestJson({
     apiUrl,

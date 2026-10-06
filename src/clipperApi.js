@@ -19,7 +19,7 @@ export async function requestClipperApiOriginPermission(apiUrl, permissionsApi =
   const normalized = normalizeClipperApiUrl(apiUrl)
   const url = new URL(normalized)
   const origin = `${url.protocol}//${url.host}/*`
-  if (origin === 'https://api.auroradocs.eu/*' || url.hostname === 'localhost' || url.hostname === '127.0.0.1') return true
+  if (origin === 'https://api.aurora.ink/*' || origin === 'https://api.auroradocs.eu/*' || url.hostname === 'localhost' || url.hostname === '127.0.0.1') return true
   if (!permissionsApi?.request) return false
   return permissionsApi.request({ origins: [origin] })
 }

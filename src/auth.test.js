@@ -32,6 +32,10 @@ function createFetchStub(handlers) {
   return { fetchImpl, calls }
 }
 
+test('normalizeApiUrl defaults to the Aurora API', () => {
+  assert.equal(normalizeApiUrl(''), 'https://api.aurora.ink')
+})
+
 test('normalizeApiUrl trims whitespace and trailing slashes', () => {
   assert.equal(normalizeApiUrl(' https://api.auroradocs.eu/// '), 'https://api.auroradocs.eu')
 })
